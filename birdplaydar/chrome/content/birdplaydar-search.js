@@ -65,33 +65,6 @@ Birdplaydar.Page = {
       function() {
         controller.resolveQuery();
       },false);
-
-  
-    /*
-    var auth_details = {
-      name: "birdplaydar",
-      website: "do we really need auth"
-    };
-    var listeners = {
-      onStat: function (detected) {
-        if (detected) {
-          alert('Playdar detected');
-        } else {
-          alert('Playdar unavailabled');
-        }
-      },
-      onAuth: function () {
-        alert('Access to Playdar authorised');
-      },
-      onAuthClear: function () {
-        alert('User revoked authorisation');
-      }
-    };
-
-    Playdar.setup(auth_details);
-    Playdar.client.register_listeners(listeners);
-    Playdar.client.init();
-    */
   
     var listeners = {
       
@@ -107,10 +80,6 @@ Birdplaydar.Page = {
         Birdplaydar.Page.processResults(response,final_answer);
       },
 
-      onUrl : function (resp) {
-        //alert(resp);
-      }
-
     };
 
     this.utils = Birdplaydar.Utils;
@@ -123,17 +92,11 @@ Birdplaydar.Page = {
   processResults : function(resp, final_answer) {
      
     var results = resp.results;
-    //alert("got results, length = " + results.length);
     for (var r in results) {
       var curr_result = results[r];
-      //alert("sid: " + curr_result.sid + "\ntrack " + curr_result.track);
       if (this.sids.indexOf(curr_result.sid) == -1) {
         this.sids.push(curr_result.sid);
-        //alert("track: " + curr_result.track +
-             // "\nsource: " + curr_result.source +
-             // "\nscore: " + curr_result.score);
         this.addTrack(curr_result);
-        //this.utils.getUrlFromSid(curr_result.sid);
       }
     }
      
@@ -145,20 +108,19 @@ Birdplaydar.Page = {
     var propArray = Cc['@songbirdnest.com/Songbird/Properties/MutablePropertyArray;1']
                       .createInstance(Ci.sbIMutablePropertyArray);
     if(result.track)
-    propArray.appendProperty(SBProperties.trackName,result.track);
+      propArray.appendProperty(SBProperties.trackName,result.track);
     if(result.artist)
-    propArray.appendProperty(SBProperties.artistName,result.artist);
+      propArray.appendProperty(SBProperties.artistName,result.artist);
     if(result.album)
-    propArray.appendProperty(SBProperties.albumName,result.album);
+      propArray.appendProperty(SBProperties.albumName,result.album);
     if(result.bitrate)
-    propArray.appendProperty(SBProperties.bitRate,result.bitrate);
+      propArray.appendProperty(SBProperties.bitRate,result.bitrate);
     if(result.duration)
-    propArray.appendProperty(SBProperties.duration,result.duration);
-    //propArray.appendProperty(SBProperties.contentURL,this.SID_URL_BASE + result.sid);
+      propArray.appendProperty(SBProperties.duration,result.duration);
+    
     var ioSvc = Cc['@mozilla.org/network/io-service;1']
                   .getService(Ci.nsIIOService);
     var uri = ioSvc.newURI(this.SID_URL_BASE + result.sid, null, null);
-    //alert("formed a uri"); 
     var libUtils = Cc['@songbirdnest.com/Songbird/library/Manager;1']
                      .getService(Ci.sbILibraryUtils);
     var contentURI = libUtils.getContentURI(uri);
