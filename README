@@ -1,0 +1,10 @@
+birdplaydar
+-----------
+
+goals:
+
+(1) create utilities that make it easy to call the playdar
+    API from a Songbird extension
+
+(2) create an example search add-on that facilitates playdar
+    search in Songbird
