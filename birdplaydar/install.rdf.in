@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+#filter substitution
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+     xmlns:songbird="http://www.songbirdnest.com/2007/addon-metadata-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>@EXTENSION_UUID@</em:id>
+    <em:type>2</em:type>
+    <em:name>birdplaydar</em:name>
+    <em:version>0.0.0.1</em:version>
+    <em:creator>Steve Lloyd</em:creator>
+    <em:description>playdar music search for songbird</em:description>
+    <em:homepageURL>http://www.repeatingbeats.com</em:homepageURL>
+    <em:optionsURL>chrome://birdplaydar/content/birdplaydar-options.xul</em:optionsURL>
+    <em:targetPlatform>@EXTENSION_ARCH@</em:targetPlatform>   
+    <em:targetApplication>
+      <Description>
+        <em:id>songbird@songbirdnest.com</em:id>
+        <em:minVersion>1.0.0pre</em:minVersion>
+        <em:maxVersion>1.5.0a</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+  </Description>
+</RDF>
