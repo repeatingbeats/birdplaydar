@@ -24,6 +24,8 @@ case $1 in
 	exit
 ;;
 esac	
-rsync -rv --exclude "*.svn" --exclude "*.swp" birdplaydar $SONGBIRD/extensions/
+rsync -rv --exclude "*.svn" --exclude "*.swp" \
+          --exclude "*.git" --exclude ".DS_Store" \
+          birdplaydar $SONGBIRD/extensions/
 $MAKE_COMMAND
 cp $SONGBIRD/compiled/extensions/birdplaydar/*.xpi .
