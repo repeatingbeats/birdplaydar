@@ -1,3 +1,11 @@
+/*
+  Derived from the playdar javascript library at
+  http://github.com/jwheare/playdar.js (James Wheare)
+
+  It's essentially working, but the plan is to rewrite as an XPCOM
+  service to manage interaction with playdar
+*/
+
 if (typeof(Cc) == 'undefined')
   var Cc = Components.classes;
 if (typeof(Ci) == 'undefined')
