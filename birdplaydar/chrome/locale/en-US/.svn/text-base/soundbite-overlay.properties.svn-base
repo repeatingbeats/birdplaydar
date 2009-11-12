@@ -1,0 +1,18 @@
+versionMessage=SoundBite v 0.9.0.1
+
+paneAllProcessed=All Tracks Processed
+paneResumeExtraction=Resume Feature Extraction
+panePauseExtraction=Pause Feature Extraction
+paneExtractionInit=Initializing...
+panePauseDelay=Pausing...
+paneChooseTarget=Choose a playlist...
+paneNoTargets=No available playlists
+
+errPlaylistNoView=No Current Media View. Please Navigate to a Media View.
+errPlaylistNoSeed=Playlist creation requires a seed track. \nPlease select a track before pressing Create Playlist.
+errPlaylistNotProcessed=Seed track has not yet been analyzed by SoundBite.
+errPlaylistMultiple=Multiple tracks selected. Playlist creation requires a single selected seed track.
+errPlaylistBadTrack=SoundBite encountered a problem while analyzing this track.\nIt is unavailable for SoundBite playlists.
+
+
+

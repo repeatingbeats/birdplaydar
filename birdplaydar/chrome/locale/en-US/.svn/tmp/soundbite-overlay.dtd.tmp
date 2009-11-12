@@ -1,0 +1,38 @@
+<!-- SoundBite Menu Command -->
+<!ENTITY soundbite.menucommand.label "SoundBite">
+
+<!-- SoundBite Display Pane Strings -->
+<!ENTITY soundbite.pane.heading "SoundBite">
+<!ENTITY soundbite.pane.createPlaylist "Create Playlist">
+<!ENTITY soundbite.pane.playlistHeading "Playlists: ">
+<!ENTITY soundbite.pane.trackNumber "Number Of Tracks">
+<!ENTITY soundbite.pane.excludeAlbum "Exclude Tracks From Seed Album">
+<!ENTITY soundbite.pane.excludeArtist "Exclude Tracks From Seed Artist">
+<!ENTITY soundbite.pane.onePerArtist "Limit To One Song Per Artist">
+<!ENTITY soundbite.pane.processHeading "Track Processing: ">
+<!ENTITY soundbite.pane.processLabel "Processed Tracks:">
+<!ENTITY soundbite.pane.startExtraction "Start Feature Extraction">
+<!ENTITY soundbite.pane.mediaViewHeading "SoundBite Media View: ">
+<!ENTITY soundbite.pane.radioLibView "Map View">
+<!ENTITY soundbite.pane.radioSimView "Network View">
+<!ENTITY soundbite.pane.radioColorGenre "Color By Genre">
+<!ENTITY soundbite.pane.radioColorArtist "Color By Artist">
+<!ENTITY soundbite.pane.radioColorAlbum "Color By Album">
+<!ENTITY soundbite.pane.radioColorRating "Color By Rating">
+<!ENTITY soundbite.pane.neighborNum "Number of Neighbors">
+<!ENTITY soundbite.pane.contextHelp "Show Context Help">
+<!ENTITY soundbite.pane.targetLabel "Target Playlist: ">
+<!ENTITY soundbite.pane.simWeights "Similarity Weights">
+
+<!-- SoundBite Weights PopUp Strings -->
+<!ENTITY soundbite.weights.windowTitle "SoundBite Weights">
+<!ENTITY soundbite.weights.adjustLabel "Adjust SoundBite Weights">
+<!ENTITY soundbite.weights.lowSlider "LOW">
+<!ENTITY soundbite.weights.midSlider "MID">
+<!ENTITY soundbite.weights.highSlider "HIGH">
+
+
+
+
+
+

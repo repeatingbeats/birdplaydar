@@ -1,0 +1,13 @@
+# Makefile for birdplaydar/defaults/
+
+DEPTH = ../../..
+topsrcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+include $(DEPTH)/build/autodefs.mk
+
+SUBDIRS = preferences \
+          $(NULL)
+
+include $(topsrcdir)/build/rules.mk

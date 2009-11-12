@@ -1,0 +1,27 @@
+#search-area {
+  margin : 10px;
+}
+
+#search-heading {
+  font-weight : bold;
+  font-size : 2.5em;
+}
+
+#search-groups {
+  font-weight :bold;
+  font-size : 1.3em;
+}
+
+#button-label {
+  font-weight : bold;
+  font-size : 1.3em;
+}
+
+.search {
+  font-size : 1.8em;
+}
+
+.search-input {
+  min-width : 300px;
+}
+

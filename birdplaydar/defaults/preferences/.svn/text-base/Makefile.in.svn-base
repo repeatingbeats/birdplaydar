@@ -1,0 +1,22 @@
+# Makefile for soundbite/defaults/preferences/
+
+DEPTH = ../../../..
+topsrcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+include $(DEPTH)/build/autodefs.mk
+
+EXTRA_SCRIPT_COMPONENTS = $(srcdir)/prefs.js \
+                          $(NULL)
+
+EXTENSION_STAGE_DIR = ../../.xpistage
+
+include $(topsrcdir)/build/rules.mk
+
+libs:: extinstall
+
+extinstall:
+	$(INSTALL_FILE) $(EXTRA_SCRIPT_COMPONENTS) $(SONGBIRD_PREFERENCESDIR)
+
+.PHONY: extinstall

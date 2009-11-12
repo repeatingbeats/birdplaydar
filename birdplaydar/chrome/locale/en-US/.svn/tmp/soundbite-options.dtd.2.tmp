@@ -1,0 +1,12 @@
+<!ENTITY prefwindow.title "SoundBite preferences">
+<!ENTITY pane1.title "SoundBite preferences">
+<!ENTITY maxtracks.label "Number of Tracks in Playlist">
+<!ENTITY maxtracks.accesskey "N">
+<!ENTITY seedalbumpref.label "Exclude Songs From Seed Album">
+<!ENTITY seedalbumpref.accesskey "b">
+<!ENTITY seedartistpref.label "Exclude Songs From Seed Artist">
+<!ENTITY seedartistpref.accesskey "t">
+<!ENTITY oneperpref.label "Limit Playlist To One Song Per Artist">
+<!ENTITY oneperpref.accesskey "L">
+<!ENTITY enhancedModePref.label "Enable Enhanced Mode">
+<!ENTITY enhancedModePref.accesskey "E">

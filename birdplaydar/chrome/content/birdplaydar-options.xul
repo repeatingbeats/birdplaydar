@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://birdplaydar/locale/birdplaydar.dtd">
+<prefwindow id="birdplaydarPrefs" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" title="&birdplaydar.prefWindow.title;">
+  <prefpane id="birdplaydarPrefPanel" label="&birdplaydar.prefPanel.title;">
+    <preferences>
+      <preference id="testpref" name="extensions.birdplaydar.testpref" type="bool"/>
+    </preferences>
+    <checkbox id="testprefCheck"
+              preference="testpref"
+              label="&birdplaydar.prefs.testpref.label;"
+              accesskey="&birdplaydar.prefs.testpref.accesskey;"/>
+    <spacer height="8"/>
+  </prefpane>
+</prefwindow>
