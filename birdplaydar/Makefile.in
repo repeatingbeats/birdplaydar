@@ -1,0 +1,39 @@
+# birdplaydar/Makefile.in
+
+DEPTH     = ../..
+topsrcdir = @top_srcdir@
+srcdir    = @srcdir@
+VPATH     = @srcdir@
+  
+include $(DEPTH)/build/autodefs.mk
+
+# directories
+SUBDIRS = chrome \
+		  defaults \
+		  $(NULL)
+
+# extension name
+EXTENSION_NAME = birdplaydar
+# extension UUID (just a unique text string)
+EXTENSION_UUID = $(EXTENSION_NAME)@repeatingbeats.com
+# source code directory
+EXTENSION_DIR  = .
+# build target
+EXTENSION_STAGE_DIR = ./.xpistage
+
+# Set this to 1 to install the extension
+ifdef DEBUG
+INSTALL_EXTENSION = 1
+endif
+
+EXTENSION_VER = 0.0.0.1
+
+CREATEDIRS = \
+			 $(SONGBIRD_PREFERENCESDIR) \
+			 $(NULL)
+
+# add $(SONGBIRD_COMPONENTSDIR)
+
+#libs:: create_dirs
+
+include $(topsrcdir)/build/rules.mk
