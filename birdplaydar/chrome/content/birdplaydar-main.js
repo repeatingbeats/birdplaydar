@@ -12,7 +12,6 @@ Cu.import("resource://app/jsmodules/sbProperties.jsm");
 Cu.import("resource://app/jsmodules/sbLibraryUtils.jsm");
 Cu.import("resource://app/jsmodules/kPlaylistCommands.jsm");
 
-
 if (typeof Birdplaydar == 'undefined') {
   var Birdplaydar = {};
 }
@@ -49,24 +48,23 @@ Birdplaydar.Controller = {
 			            .getService(Ci.sbIServicePaneService);
 	svcPaneSvc.init();
 	
-	var birdplaydarNode = svcPaneSvc.getNode("urn:birdplaydar");
-	if (birdplaydarNode == null) {
-	  birdplaydarNode = svcPaneSvc.addNode("urn:birdplaydar", svcPaneSvc.root, false);
-	  birdplaydarNode.url = "chrome://birdplaydar/content/birdplaydar-search.xul";
-	  birdplaydarNode.name = this.strings.getString("servicePaneName");
-	  birdplaydarNode.tooltip = this.strings.getString("servicePaneTooltip");
+    var birdplaydarNode = svcPaneSvc.getNode("urn:birdplaydar");
+    if (birdplaydarNode == null) {
+      birdplaydarNode = svcPaneSvc.addNode("urn:birdplaydar", svcPaneSvc.root, false);
+      birdplaydarNode.url = "chrome://birdplaydar/content/birdplaydar-search.xul";
+      birdplaydarNode.name = this.strings.getString("servicePaneName");
+      birdplaydarNode.tooltip = this.strings.getString("servicePaneTooltip");
       birdplaydarNode.properties = "birdplaydar";
       birdplaydarNode.image = "http://www.playdar.org/favicon.ico";
-	  birdplaydarNode.setAttributeNS(
+      birdplaydarNode.setAttributeNS(
 				"http://songbirdnest.com/rdf/servicepane#", "Weight", -3);
-	  svcPaneSvc.sortNode(birdplaydarNode);
-	  svcPaneSvc.save();
-	}
+      svcPaneSvc.sortNode(birdplaydarNode);
+      svcPaneSvc.save();
+    }
 
-	birdplaydarNode.hidden = false;
+    birdplaydarNode.hidden = false;
   },
-
-  
+ 
 };
 
 window.addEventListener("load", function(e) {
