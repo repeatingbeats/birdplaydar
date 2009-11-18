@@ -1,0 +1,17 @@
+
+DEPTH = ../../../../..
+topsrcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+include $(DEPTH)/build/autodefs.mk
+
+IS_EXTENSION = 1
+
+XPIDL_SRCS = sbIPlaydarService.idl \
+             $(NULL)
+
+XPIDL_MODULE = sbIPlaydarService.xpt
+
+include $(topsrcdir)/build/rules.mk
+

@@ -1,0 +1,37 @@
+
+#include "nsISupports.idl"
+
+interface sbIMediaList;
+interface sbIPropertyArray;
+interface sbIMediaListListener;
+interface sbIPlaydarServiceListener;
+
+[scriptable, uuid(57b773d6-7a0f-41f1-8ef1-768109d47e1c)]
+interface sbIPlaydarService : nsISupports
+{
+
+  attribute AString versionString;
+
+  AString registerClient(in sbIPlaydarServiceListener listener);
+
+  void unregisterClient(in AString cid);
+
+  void addResultsListListener(in AString cid,
+                              in sbIMediaListListener listener,
+                              [optional] in boolean ownsWeak,
+                              [optional] in unsigned long flags,
+                              [optional] in sbIPropertyArray filter);
+
+  sbIMediaList getClientResultsList(in AString cid);
+
+  void stat();
+
+  void resolve(in AString cid,
+               in AString artist,
+               in AString album,
+               in AString track,
+               [optional] in AString qid,
+               [optional] in AString url); 
+  
+  
+};

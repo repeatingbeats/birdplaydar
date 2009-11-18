@@ -1,0 +1,12 @@
+
+#include "nsISupports.idl"
+
+[scriptable, uuid(1c761454-b795-418e-8497-4ece9d20107f)]
+interface sbIPlaydarServiceListener : nsISupports
+{
+  attribute AString clientID;
+  void onStat(in boolean detected);
+  void onResults(in AString response, in boolean finalAnswer);
+  
+  
+};

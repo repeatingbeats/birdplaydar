@@ -1,0 +1,21 @@
+
+DEPTH = ../../../../..
+topsrcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+include $(DEPTH)/build/autodefs.mk
+
+# component name
+target_name = sbIPlaydarServiceListener
+
+EXTRA_SCRIPT_COMPONENTS = $(srcdir)/sbPlaydarServiceListener.js \
+                          $(NULL)
+
+# put this in our staging directory
+EXTENSION_STAGE_DIR = ../../../.xpistage
+
+# into components/ 
+SONGBIRD_COMPONENTS = $(EXTRA_SCRIPT_COMPONENTS)
+
+include $(topsrcdir)/build/rules.mk
