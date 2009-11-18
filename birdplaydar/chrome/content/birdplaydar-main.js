@@ -26,7 +26,39 @@ Birdplaydar.Controller = {
     this._menuCmd = document.getElementById("birdplaydar-menu-cmd");
     this._menuCmd.addEventListener("command",
       function() {
-        alert("birdplaydar");
+        // test the XPCOM component
+        var svc = Cc['@repeatingbeats.com/playdar/playdar-service;1']
+                    .getService(Ci.sbIPlaydarService);
+        var controller = this;
+        var listener = {
+  
+            onStat : function(detected) {
+              if (detected) {
+                alert("Playdar detected");
+                svc.resolve(controller.cid,'Spoon','','The Mystery Zone');
+              } else {
+                alert("Playdar unavailable");
+              }
+            },
+  
+            onResults : function(response,finalAnswer) {
+              alert("got response: " + response + 
+                    "\nfinalAnswer: " + finalAnswer);
+            }
+        };
+
+        this.cid = svc.registerClient(listener);
+        var listListener = {
+          onItemAdded : function(list, item, i) {
+            alert("added track: " + item.getProperty(SBProperties.trackName) +
+                  "\nto media list for client: " + controller.cid);
+          }
+        };
+
+        svc.addResultsListListener(this.cid,listListener,false,
+            LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
+         
+        
       },false);
   
     this.addServicePaneBookmark();  

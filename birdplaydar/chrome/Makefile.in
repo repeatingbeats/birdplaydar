@@ -5,12 +5,10 @@ VPATH     = @srcdir@
   
 include $(DEPTH)/build/autodefs.mk
 
-# build target for extension
-EXTENSION_STAGE_DIR = $(SONGBIRD_OBJDIR)/extensions/birdplaydar/.xpistage
+IS_EXTENSION = 1
 
-# make jar file from jar.mn.in
 JAR_MANIFEST = jar.mn.in
-# put jar file in target directory
+
 JAR_TARGET_DIR = $(EXTENSION_STAGE_DIR)/chrome
 
 include $(topsrcdir)/build/rules.mk
