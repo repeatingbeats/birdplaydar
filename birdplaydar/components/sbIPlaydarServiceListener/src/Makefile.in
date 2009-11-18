@@ -1,0 +1,18 @@
+
+DEPTH = ../../../../..
+topsrcdir = @top_srcdir@
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+include $(DEPTH)/build/autodefs.mk
+
+IS_EXTENSION = 1
+
+target_name = sbIPlaydarServiceListener
+
+EXTRA_SCRIPT_COMPONENTS = $(srcdir)/sbPlaydarServiceListener.js \
+                          $(NULL)
+
+SONGBIRD_COMPONENTS = $(EXTRA_SCRIPT_COMPONENTS)
+
+include $(topsrcdir)/build/rules.mk
