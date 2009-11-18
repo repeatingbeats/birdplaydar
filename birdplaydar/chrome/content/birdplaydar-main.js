@@ -44,8 +44,8 @@ Birdplaydar.Controller = {
             },
   
             onResults : function(response,finalAnswer) {
-              alert("got response: " + response + 
-                    "\nfinalAnswer: " + finalAnswer);
+              //alert("got response: " + response + 
+              //      "\nfinalAnswer: " + finalAnswer);
             }
         };
 
@@ -59,8 +59,35 @@ Birdplaydar.Controller = {
 
         svc.addResultsListListener(this.cid,listListener,false,
             LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
-         
-        
+
+        var listener2 = {
+            clientID : null, 
+            onStat : function(detected) {
+              if (detected) {
+                alert("Playdar detected");
+                svc.resolve(controller.cid2,'The Hold Steady','','Constructive Summer');
+              } else {
+                alert("Playdar unavailable");
+              }
+            },
+  
+            onResults : function(response,finalAnswer) {
+              //alert("got response: " + response + 
+              //      "\nfinalAnswer: " + finalAnswer);
+            }
+        };
+
+        this.cid2 = svc.registerClient(listener2);
+        var listListener2 = {
+          onItemAdded : function(list, item, i) {
+            alert("added track: " + item.getProperty(SBProperties.trackName) +
+                  "\nto media list for client: " + controller.cid2);
+          }
+        };
+
+        svc.addResultsListListener(this.cid,listListener2,false,
+            LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
+
       },false);
   
     this.addServicePaneBookmark();  

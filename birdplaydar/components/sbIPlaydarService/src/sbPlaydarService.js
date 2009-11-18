@@ -67,9 +67,6 @@ function sbIPlaydarService() {
   }
   this.playdarLibrary = playdarLibrary;
 
-  this.listeners = Cc['@mozilla.org/array;1']
-                     .createInstance(Ci.nsIMutableArray);
-
   // init resolution vars
   this.resQueue = [];
   this.resInProgress = {
@@ -110,6 +107,7 @@ sbIPlaydarService.prototype = {
   resolveQids : [],
   lastQid : "",
   pollCounts : {},
+  listeners : [],
 
   JSON : Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON),
   
@@ -146,8 +144,15 @@ sbIPlaydarService.prototype = {
     var list = this.playdarLibrary.createMediaList('simple');
     var clientID = list.getProperty(SBProperties.GUID);
     listener.clientID = clientID;
-    this.listeners.appendElement(listener,false);
+    this.listeners[clientID] = listener;
     this.stat(clientID);
+    
+    var dbstr = "";
+    for (var i in this.listeners) {
+      dbstr += this.listeners[i].clientID + "\n";
+    }
+    Cu.reportError(dbstr);    
+
     return clientID; 
   },
 
@@ -285,6 +290,7 @@ sbIPlaydarService.prototype = {
       var currResult = results[r];
       var sid = currResult.sid;
       if (!this.listContainsSid(clientList,sid)) {
+        Cu.reportError("adding " + currResult.track + " to " + cid);
         this.addTrackToList(clientList,currResult);
       }
     }
@@ -368,16 +374,7 @@ sbIPlaydarService.prototype = {
   },
 
   getListenerByCid : function(cid) {
-    Cu.reportError("num listeners: " + this.listeners.length);
-    var listenerEnum = this.listeners.enumerate();
-    while (listenerEnum.hasMoreElements()) {
-      var currListener = listenerEnum.getNext();
-      Cu.reportError("cid: " + cid + "\nclientID: " + currListener.clientID);
-      if (currListener.clientID == cid) {
-        return currListener;
-      }
-    }
-    return null;
+    return this.listeners[cid];
   },
 
   getBaseUrl : function(path,params) {
