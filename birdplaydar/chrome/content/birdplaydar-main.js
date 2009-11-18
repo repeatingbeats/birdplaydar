@@ -31,11 +31,13 @@ Birdplaydar.Controller = {
                     .getService(Ci.sbIPlaydarService);
         var controller = this;
         var listener = {
-  
+            clientID : null, 
             onStat : function(detected) {
               if (detected) {
                 alert("Playdar detected");
-                svc.resolve(controller.cid,'Spoon','','The Mystery Zone');
+                svc.resolve(controller.cid,'The Hold Steady','','Positive');
+                svc.resolve(controller.cid,'The National','','Fake Empire');
+                svc.resolve(controller.cid,'The HoldSteady','','Positive');
               } else {
                 alert("Playdar unavailable");
               }

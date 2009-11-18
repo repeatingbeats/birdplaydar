@@ -75,7 +75,7 @@ function sbIPlaydarService() {
   this.resInProgress = {
     count : 0,
     queries : {}
-  }; 
+  };
 };
 
 sbIPlaydarService.prototype.constructor = sbIPlaydarService;
@@ -122,7 +122,6 @@ sbIPlaydarService.prototype = {
     var url = this.getBaseUrl('/api/',params);
     var req = Cc['@mozilla.org/xmlextras/xmlhttprequest;1']
                 .createInstance(Ci.nsIXMLHttpRequest);
-    Cu.reportError(url);
     req.open('GET',url,true);
     req.onreadystatechange = function(e) {
       if (req.readyState == 4) {
@@ -182,16 +181,13 @@ sbIPlaydarService.prototype = {
   checkStatTimeout : function(cid) {
     
     if (!this.statResponse) {
-      //this.listeners.onStat(false);
       this.getListenerByCid(cid).onStat(false);
     }
   },
 
   handleStat : function (resp,cid) {
-    Cu.reportError(resp);
     var resp = this.JSON.decode(resp);
     this.statResponse = resp;
-    //this.listeners.onStat(resp);
     this.getListenerByCid(cid).onStat(resp);
   },
 
@@ -216,8 +212,6 @@ sbIPlaydarService.prototype = {
 
   handleResolution : function(resp,cid) {
   
-    //this.getWindow().alert("handle resolution for cid: " + cid);
-    //this.getListenerByCid(cid).onResults(resp,false);
     var query = this.JSON.decode(resp);
     if (this.resInProgress.queries[query.qid]) {
       this.lastQid = query.qid;
@@ -285,6 +279,66 @@ sbIPlaydarService.prototype = {
 
   processResults : function(decodedResp,cid) {
     
+    var results = decodedResp.results; 
+    var clientList = this.getClientResultsList(cid);
+    for (var r in results) {
+      var currResult = results[r];
+      var sid = currResult.sid;
+      if (!this.listContainsSid(clientList,sid)) {
+        this.addTrackToList(clientList,currResult);
+      }
+    }
+  },
+
+  listContainsSid : function(mediaList,sid) {
+
+    var sidContentUri = this.getUriForSid(sid);
+    var contains = false;
+    var listener =  {
+      onEnumerationBegin : function(list) {},
+      onEnumeratedItem : function(list,item) {
+        if (item.contentSrc.equals(sidContentUri)) {
+          contains = true;
+        }
+      },
+      onEnumerationEnd : function(list,code) {}
+    };
+    mediaList.enumerateAllItems(listener);
+    return contains;
+  },
+
+  getUriForSid : function(sid) {
+    
+    var ioSvc = Cc['@mozilla.org/network/io-service;1']
+                  .getService(Ci.nsIIOService);
+    var uri = ioSvc.newURI(this.getBaseUrl('/sid/') + sid,null,null);
+    var libUtils = Cc['@songbirdnest.com/Songbird/library/Manager;1']
+                     .getService(Ci.sbILibraryUtils);
+    return libUtils.getContentURI(uri);
+  },
+
+  addTrackToList : function(mediaList,result) {
+    
+    var propArray =
+      Cc['@songbirdnest.com/Songbird/Properties/MutablePropertyArray;1']
+        .createInstance(Ci.sbIMutablePropertyArray);
+
+    if(result.track)
+      propArray.appendProperty(SBProperties.trackName,result.track);
+    if(result.artist)
+      propArray.appendProperty(SBProperties.artistName,result.artist);
+    if(result.album)
+      propArray.appendProperty(SBProperties.albumName,result.album);
+    if(result.bitrate)
+      propArray.appendProperty(SBProperties.bitRate,result.bitrate);
+    if(result.duration)
+      propArray.appendProperty(SBProperties.duration,result.duration);
+    
+    var contentURI = this.getUriForSid(result.sid);
+    
+    var mediaItem = this.playdarLibrary.createMediaItem(contentURI,propArray);
+    
+    mediaList.add(mediaItem);
   },
   
   pollResults : function(decodedResp,cid) {
@@ -314,10 +368,11 @@ sbIPlaydarService.prototype = {
   },
 
   getListenerByCid : function(cid) {
-
+    Cu.reportError("num listeners: " + this.listeners.length);
     var listenerEnum = this.listeners.enumerate();
     while (listenerEnum.hasMoreElements()) {
       var currListener = listenerEnum.getNext();
+      Cu.reportError("cid: " + cid + "\nclientID: " + currListener.clientID);
       if (currListener.clientID == cid) {
         return currListener;
       }
