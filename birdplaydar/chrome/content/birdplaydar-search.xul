@@ -89,10 +89,11 @@
                         <progressmeter id="resolve-meter"
                                        mode="undetermined"
                         />
-                        <label id="resolve-label" value="&birdplaydar.mediapage.resolveLabel;"/>
+                        <label id="resolve-label" class="resolve-text" value="&birdplaydar.mediapage.resolveLabel;"/>
                       </hbox>
                     </hbox>
                   </button>
+                  <label id="resolve-feedback" class="resolve-text" hidden="true"/>
                 <hbox flex="1"/>
               </hbox>
             </row>

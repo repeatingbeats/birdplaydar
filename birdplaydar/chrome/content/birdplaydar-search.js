@@ -54,6 +54,9 @@ Birdplaydar.SearchPage = {
       onResults : function(response,finalAnswer) {
         if (finalAnswer) {
           document.getElementById("resolve-progress").hidden = true;
+          document.getElementById("resolve-feedback").value = 
+              controller.getFeedbackString();
+          document.getElementById("resolve-feedback").hidden = false;
         }
       },
     };
@@ -112,6 +115,14 @@ Birdplaydar.SearchPage = {
     },false);
   },
 
+  getFeedbackString : function() {
+
+    var numResults = this._mediaList.length;
+    var str = this.strings.getString("playdarFound") + " " + numResults +
+              " " + this.strings.getString("playdarTrack");
+    return (numResults == 1) ? str : (str += "s");
+  },
+
   resolveQuery : function() {
 
     if (this.detected) {
@@ -125,6 +136,7 @@ Birdplaydar.SearchPage = {
       }
    
       this._mediaList.clear();
+      document.getElementById("resolve-feedback").hidden = true;
       document.getElementById("resolve-progress").hidden = false;
       this.playdarService.resolve(this.playdarCID,artist,album,track);
     } else {
@@ -137,7 +149,7 @@ Birdplaydar.SearchPage = {
     var label = document.getElementById("playdar-detection"); 
     if (detected) {
       label.value = this.strings.getString("playdarDetected");
-      label.setAttribute("style","color:#74DF00");
+      label.setAttribute("style","color:#9AFE2E");
     } else {
       label.value = this.strings.getString("playdarNotDetected");
       label.setAttribute("style","color:#B00");
