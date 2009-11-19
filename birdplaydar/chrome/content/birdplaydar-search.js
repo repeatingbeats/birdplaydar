@@ -30,13 +30,7 @@ Birdplaydar.SearchPage = {
     var controller = this;
     this.detected = false;
     this.strings = document.getElementById('birdplaydar-strings');
-    // set up our columnSpec
-    var cspec = SBProperties.trackName + " 250 " +
-                SBProperties.artistName + " 170 " +
-                SBProperties.albumName + " 170 " +
-                SBProperties.duration + " 40 " +
-                SBProperties.bitRate + " 70 ";
-   
+       
     // set up our interaction with playdar 
     this.playdarService = Cc['@repeatingbeats.com/playdar/playdar-service;1']
                             .getService(Ci.sbIPlaydarService);
@@ -77,15 +71,25 @@ Birdplaydar.SearchPage = {
          playdarMediaListListener, false,
         LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
      
+    // set up our columnSpec
+    var cspec = SBProperties.trackName + " 250 " +
+                SBProperties.artistName + " 180 " +
+                SBProperties.albumName + " 180 " +
+                SBProperties.duration + " 50 " +
+                SBProperties.bitRate + " 80 " +
+                this.playdarService.sourcePropID + " 120 " +
+                this.playdarService.scorePropID + " 50 ";
     this._mediaList.setProperty(SBProperties.columnSpec,cspec);
-    this._playlist = document.getElementById("birdplaydar-playlist");
    
     // hook up the playlist and the view
+    this._playlist = document.getElementById("birdplaydar-playlist");
     var mgr = Cc["@songbirdnest.com/Songbird/PlaylistCommandsManager;1"]
                 .createInstance(Ci.sbIPlaylistCommandsManager);
     var cmds = mgr.request(kPlaylistCommands.MEDIAITEM_DEFAULT);
     this._mediaListView = this._mediaList.createView(); 
     this._playlist.bind(this._mediaListView, cmds);
+
+
 
     // hook up the search button
     var wMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
@@ -149,7 +153,7 @@ Birdplaydar.SearchPage = {
     var label = document.getElementById("playdar-detection"); 
     if (detected) {
       label.value = this.strings.getString("playdarDetected");
-      label.setAttribute("style","color:#9AFE2E");
+      label.setAttribute("style","color:#79CB0C");
     } else {
       label.value = this.strings.getString("playdarNotDetected");
       label.setAttribute("style","color:#B00");

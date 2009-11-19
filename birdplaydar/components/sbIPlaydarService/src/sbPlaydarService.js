@@ -30,6 +30,9 @@ const CONTRACTID  = "@repeatingbeats.com/playdar/playdar-service;1";
 const PLAYDAR_LIBRARY_DB_GUID = "playdar@repeatingbeats.com";
 // URN for service pane folder
 const PLAYDAR_SERVICE_PANE_URN = "urn:playdar";
+// custom property IDs
+const PLAYDAR_PROP_ID_SOURCE = "http://repeatingbeats.com/playdar/1.0#source";
+const PLAYDAR_PROP_ID_SCORE = "http://repeatingbeats.com/playdar/1.0#score";
 
 // XPCOM component constructor
 function sbIPlaydarService() {
@@ -96,7 +99,32 @@ function sbIPlaydarService() {
   }
   playdarFolderNode.hidden = false;
   this.playdarServiceNode = playdarFolderNode;
-  
+ 
+  // create properties for Playdar source and Playdar score
+  var propManager = Cc['@songbirdnest.com/Songbird/Properties/PropertyManager;1']
+                      .getService(Ci.sbIPropertyManager);
+ 
+  var source = Cc['@songbirdnest.com/Songbird/Properties/Info/Text;1']
+                 .createInstance(Ci.sbITextPropertyInfo);
+  source.id = PLAYDAR_PROP_ID_SOURCE;
+  source.userEditable = false;
+  source.remoteReadable = false;
+  source.remoteWritable = false;
+  source.displayName = "Source";
+  propManager.addPropertyInfo(source);
+
+  var score = Cc['@songbirdnest.com/Songbird/Properties/Info/Text;1']
+                 .createInstance(Ci.sbITextPropertyInfo);
+  score.id = PLAYDAR_PROP_ID_SCORE;
+  score.userEditable = false;
+  score.remoteReadable = false;
+  score.remoteWritable = false;
+  score.displayName = "Score";
+  propManager.addPropertyInfo(score);
+
+  this.sourcePropID = PLAYDAR_PROP_ID_SOURCE;
+  this.scorePropID = PLAYDAR_PROP_ID_SCORE;
+
   // init resolution vars
   this.resQueue = [];
   this.resInProgress = {
@@ -400,6 +428,10 @@ sbIPlaydarService.prototype = {
       propArray.appendProperty(SBProperties.bitRate,result.bitrate);
     if(result.duration)
       propArray.appendProperty(SBProperties.duration,result.duration*1000000);
+    if(result.source)
+      propArray.appendProperty(PLAYDAR_PROP_ID_SOURCE,result.source);
+    if(result.score)
+      propArray.appendProperty(PLAYDAR_PROP_ID_SCORE,result.score);
 
     var hidden = this.keepHidden[cid] ? "1" : "0";
     propArray.appendProperty(SBProperties.hidden,hidden);
