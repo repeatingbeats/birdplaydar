@@ -127,7 +127,7 @@ sbIPlaydarService.prototype = {
   STAT_TIMEOUT : 2000,
   MAX_CONCURRENT_RESOLUTIONS : 10,
   REFRESH_INTERVAL : null,
-  MAX_POLLS : 5,
+  MAX_POLLS : 15,
 
   resolveQids : [],
   lastQid : "",
@@ -284,6 +284,7 @@ sbIPlaydarService.prototype = {
   processResolutionQueue : function() {
     
     if (this.resInProgress.count >= this.MAX_CONCURRENT_RESOLUTIONS) {
+      // need to do something smarter here
       return false;
     }
 

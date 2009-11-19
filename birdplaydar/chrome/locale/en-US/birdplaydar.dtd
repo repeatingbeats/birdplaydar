@@ -10,6 +10,7 @@
 <!ENTITY birdplaydar.mediapage.artistSearch "artist: ">
 <!ENTITY birdplaydar.mediapage.albumSearch "album: ">
 <!ENTITY birdplaydar.mediapage.playdarPromo "powered by">
-<!ENTITY birdplaydar.mediapage.searchTip "search for any combination of">
-<!ENTITY birdplaydar.mediapage.searchGroups "song, artist, album">
+<!ENTITY birdplaydar.mediapage.playdarDetected "Playdar Not Detected">
+<!ENTITY birdplaydar.mediapage.playdarLink "http://www.playdar.org">
 <!ENTITY birdplaydar.mediapage.buttonLabel "search">
+<!ENTITY birdplaydar.mediapage.resolveLabel "Resolving...">

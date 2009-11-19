@@ -79,12 +79,20 @@
             </row>
             <row>
               <vbox />
-              <hbox>
-                <button id="search-button"
-                        align="left"
-                        flex="0">
-                  <label id="button-label" value="&birdplaydar.mediapage.buttonLabel;"/>
-                </button>
+                <hbox align="center">
+                  <button id="search-button"
+                          align="left"
+                          flex="0">
+                    <hbox align="center">
+                      <label id="button-label" value="&birdplaydar.mediapage.buttonLabel;"/>
+                      <hbox id="resolve-progress" hidden="true" flex="1" align="center">
+                        <progressmeter id="resolve-meter"
+                                       mode="undetermined"
+                        />
+                        <label id="resolve-label" value="&birdplaydar.mediapage.resolveLabel;"/>
+                      </hbox>
+                    </hbox>
+                  </button>
                 <hbox flex="1"/>
               </hbox>
             </row>
@@ -96,8 +104,11 @@
         <image src="chrome://birdplaydar/skin/playdar_logo.gif"
                style="padding-bottom:8px;margin-bottom:7px;border-bottom:1px solid #AAA;"/>
         <hr />
-        <label value="&birdplaydar.mediapage.searchTip;"/>
-        <label id="search-groups" value="&birdplaydar.mediapage.searchGroups;"/>
+        <label id="playdar-detection" value="&birdplaydar.mediapage.playdarDetected;"/>
+        <label id="playdar-link"
+               href="http://www.playdar.org"
+               value="&birdplaydar.mediapage.playdarLink;"
+               class="text-link"/>
       </groupbox>
       <hbox flex="1"/>
     </hbox>

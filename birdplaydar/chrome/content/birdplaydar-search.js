@@ -26,7 +26,10 @@ Birdplaydar.SearchPage = {
    * Called when the page finishes loading.  
    */
   onLoad:  function(e) {
-
+  
+    var controller = this;
+    this.detected = false;
+    this.strings = document.getElementById('birdplaydar-strings');
     // set up our columnSpec
     var cspec = SBProperties.trackName + " 250 " +
                 SBProperties.artistName + " 170 " +
@@ -42,13 +45,16 @@ Birdplaydar.SearchPage = {
     
       onStat : function(detected) {
         if (detected) {
-          // do nothing right now
+          controller.setDetectionFeedback(true);
         } else {
-          alert("playdar not detected");
+          controller.setDetectionFeedback(false);
+          alert(controller.strings.getString("playdarFailMessage"));      
         }
       }, 
       onResults : function(response,finalAnswer) {
-        // do nothing, use a mediaList listener instead
+        if (finalAnswer) {
+          document.getElementById("resolve-progress").hidden = true;
+        }
       },
     };
 
@@ -84,7 +90,6 @@ Birdplaydar.SearchPage = {
     var mainWindow = wMediator.getMostRecentWindow("Songbird:Main");
     
     this.searchButton = document.getElementById("search-button");
-    var controller = this;
     this.searchButton.addEventListener("command",
       function() {
         controller.resolveQuery();
@@ -94,12 +99,30 @@ Birdplaydar.SearchPage = {
 
   resolveQuery : function() {
     
-    var track = document.getElementById("song-search-input").value;
-    var artist = document.getElementById("artist-search-input").value;
-    var album = document.getElementById("album-search-input").value;
+    if (this.detected) {
+      var track = document.getElementById("song-search-input").value;
+      var artist = document.getElementById("artist-search-input").value;
+      var album = document.getElementById("album-search-input").value;
    
-    this._mediaList.clear();
-    this.playdarService.resolve(this.playdarCID,artist,album,track); 
+      this._mediaList.clear();
+      document.getElementById("resolve-progress").hidden = false;
+      this.playdarService.resolve(this.playdarCID,artist,album,track);
+    } else {
+      alert(this.strings.getString("playdarFailMessage"));
+    }
+  },
+
+  setDetectionFeedback : function(detected) {
+
+    var label = document.getElementById("playdar-detection"); 
+    if (detected) {
+      label.value = this.strings.getString("playdarDetected");
+      label.setAttribute("style","color:#74DF00");
+    } else {
+      label.value = this.strings.getString("playdarNotDetected");
+      label.setAttribute("style","color:#B00");
+    }
+    this.detected = detected;
   },
 
   /** 

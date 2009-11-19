@@ -7,14 +7,20 @@
   font-size : 2.5em;
 }
 
-#search-groups {
-  font-weight :bold;
-  font-size : 1.3em;
-}
-
 #button-label {
   font-weight : bold;
   font-size : 1.3em;
+}
+
+#playdar-detection {
+  color : #B00;
+  font-weight : bold;
+  font-size : 1.3em;
+}
+
+#resolve-label {
+  font-size : 1.3em;
+  color : #666;
 }
 
 .search {
