@@ -80,6 +80,7 @@ function sbIPlaydarService() {
     playdarFolderNode.name = "Playdar";
     playdarFolderNode.hidden = false;
     playdarFolderNode.editable = false;
+    playdarFolderNode.properties = "folder playdar";
     
     // create the library node
     var libSps = Cc['@songbirdnest.com/servicepane/library;1']
