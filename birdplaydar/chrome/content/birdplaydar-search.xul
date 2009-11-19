@@ -24,7 +24,7 @@
     <stringbundle id="birdplaydar-strings"
                   src="chrome://birdplaydar/locale/birdplaydar.properties"/>
   </stringbundleset>
-
+  
   <hbox id="birdplaydar-top"
         align="center">
     <hbox flex="1"/>

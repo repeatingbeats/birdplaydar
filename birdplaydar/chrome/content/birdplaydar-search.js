@@ -94,15 +94,35 @@ Birdplaydar.SearchPage = {
       function() {
         controller.resolveQuery();
       },false);
+    var page = document.getElementById("birdplaydar-media-page");
+    this.addKeypressResolveListener("song-search-input",13);
+    this.addKeypressResolveListener("artist-search-input",13);
+    this.addKeypressResolveListener("album-search-input",13); 
   
   },
 
-  resolveQuery : function() {
+  addKeypressResolveListener : function(id,keyCode) {
     
+    var controller = this;
+    var element = document.getElementById(id);
+    element.addEventListener("keypress", function(e) {
+      if (e.keyCode == 13) {
+        controller.resolveQuery();
+      }
+    },false);
+  },
+
+  resolveQuery : function() {
+
     if (this.detected) {
       var track = document.getElementById("song-search-input").value;
       var artist = document.getElementById("artist-search-input").value;
       var album = document.getElementById("album-search-input").value;
+
+      if (track == '' && artist == '' && album == '') {
+        alert("empty");
+        return;
+      }
    
       this._mediaList.clear();
       document.getElementById("resolve-progress").hidden = false;
