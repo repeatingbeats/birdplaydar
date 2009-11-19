@@ -3,6 +3,7 @@
 <overlay id="birdplaydar-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+  <script src="birdplaydar-test.js"/>
   <script src="birdplaydar-main.js"/>
   
   <stringbundleset> 

@@ -5,24 +5,32 @@ interface sbIMediaList;
 interface sbIPropertyArray;
 interface sbIMediaListListener;
 interface sbIPlaydarServiceListener;
+interface sbILibrary;
+interface sbIServicePaneNode;
 
 [scriptable, uuid(57b773d6-7a0f-41f1-8ef1-768109d47e1c)]
 interface sbIPlaydarService : nsISupports
 {
 
   attribute AString versionString;
+  attribute sbILibrary playdarLibrary;
+  attribute sbIServicePaneNode playdarServiceNode;
 
-  AString registerClient(in sbIPlaydarServiceListener listener);
+  AString registerClient(in sbIPlaydarServiceListener listener,
+                         in boolean keepTracksHidden);
 
-  void unregisterClient(in AString cid);
+  void unregisterClient(in AString cid,
+                        in boolean removeClientList,
+                        in boolean removeAllTracks,
+                        [optional] in boolean removeHiddenTracks);
 
-  void addResultsListListener(in AString cid,
-                              in sbIMediaListListener listener,
-                              [optional] in boolean ownsWeak,
-                              [optional] in unsigned long flags,
-                              [optional] in sbIPropertyArray filter);
+  void addClientListListener(in AString cid,
+                             in sbIMediaListListener listener,
+                             [optional] in boolean ownsWeak,
+                             [optional] in unsigned long flags,
+                             [optional] in sbIPropertyArray filter);
 
-  sbIMediaList getClientResultsList(in AString cid);
+  sbIMediaList getClientList(in AString cid);
 
   void stat();
 
@@ -31,7 +39,10 @@ interface sbIPlaydarService : nsISupports
                in AString album,
                in AString track,
                [optional] in AString qid,
-               [optional] in AString url); 
+               [optional] in AString url);
+
+  void showClientListInServicePane (in AString cid,
+                                    in AString name); 
   
   
 };

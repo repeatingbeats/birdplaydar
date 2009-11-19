@@ -27,7 +27,9 @@ const CID         = Components.ID("57b773d6-7a0f-41f1-8ef1-768109d47e1c");
 const CONTRACTID  = "@repeatingbeats.com/playdar/playdar-service;1";
 
 // GUID for the playdar library database
-const PLAYDAR_LIBRARY_DB_GUID = "playdar@repeatingbeats.com"
+const PLAYDAR_LIBRARY_DB_GUID = "playdar@repeatingbeats.com";
+// URN for service pane folder
+const PLAYDAR_SERVICE_PANE_URN = "urn:playdar";
 
 // XPCOM component constructor
 function sbIPlaydarService() {
@@ -67,6 +69,29 @@ function sbIPlaydarService() {
   }
   this.playdarLibrary = playdarLibrary;
 
+  var sps = Cc['@songbirdnest.com/servicepane/service;1']
+              .getService(Ci.sbIServicePaneService);
+  sps.init();
+ 
+  // create service pane folder and library node if necessary
+  var playdarFolderNode = sps.getNode(PLAYDAR_SERVICE_PANE_URN);
+  if (null == playdarFolderNode) {
+    playdarFolderNode = sps.addNode('urn:playdar',sps.root,true);
+    playdarFolderNode.name = "Playdar";
+    playdarFolderNode.hidden = false;
+    playdarFolderNode.editable = false;
+    
+    // create the library node
+    var libSps = Cc['@songbirdnest.com/servicepane/library;1']
+                       .getService(Ci.sbILibraryServicePaneService);
+    var playdarLibraryNode = libSps.createNodeForLibrary(this.playdarLibrary);
+    playdarFolderNode.appendChild(playdarLibraryNode);
+    playdarLibraryNode.hidden = false;
+    sps.save();
+  }
+  playdarFolderNode.hidden = false;
+  this.playdarServiceNode = playdarFolderNode;
+  
   // init resolution vars
   this.resQueue = [];
   this.resInProgress = {
@@ -108,6 +133,7 @@ sbIPlaydarService.prototype = {
   lastQid : "",
   pollCounts : {},
   listeners : [],
+  keepHidden : [],
 
   JSON : Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON),
   
@@ -133,43 +159,73 @@ sbIPlaydarService.prototype = {
     req.send(null);
   },
 
-  /*
-   * Register a new client. Create a medialist in the Playdar library,
-   * attach the client's listener to the list, and return the guid
-   * of the list. This guid doubles as the client's unique cid so 
-   * the service knows which list to update when the client calls resolve.
-   */
-  registerClient : function(listener) {
+  registerClient : function(listener,keepTracksHidden) {
   
     var list = this.playdarLibrary.createMediaList('simple');
     var clientID = list.getProperty(SBProperties.GUID);
     listener.clientID = clientID;
     this.listeners[clientID] = listener;
     this.stat(clientID);
-    
-    var dbstr = "";
-    for (var i in this.listeners) {
-      dbstr += this.listeners[i].clientID + "\n";
-    }
-    Cu.reportError(dbstr);    
-
+    this.keepHidden[clientID] = keepTracksHidden;
     return clientID; 
   },
 
-  unregisterClient : function(cid) {
-
-    this.playdarLibrary.remove(this.playdarLibrary.getItemByGuid(cid));
+  unregisterClient : function(cid,removeClientList,removeAllTracks,removeHiddenTracks) {
+    
+    var list = this.getClientList(cid);
+    if (removeAllTracks) {
+      // remove all tracks on this client's list from the playdar library
+      this.removeItemsByProperty(list,SBProperties.isList,"0"); 
+    } else {
+       if (removeHiddenTracks) {
+        // remove all hidden tracks on client's list from the playdar library
+        this.removeItemsByProperty(list,SBProperties.hidden,"1");
+      }
+    }
+ 
+    if (removeClientList) {
+      // remove this client's results list from the playdar library
+      this.playdarLibrary.remove(list);
+    }
+    // remove the playdarServiceListener
+    delete this.listeners[cid];
   },
 
-  addResultsListListener : function(cid,listener,ownsWeak,flags,filter) {
+  removeItemsByProperty : function(list,prop,value) {
+    
+    try {
+      var trackArray = list.getItemsByProperty(prop,value);
+      this.playdarLibrary.removeSome(trackArray.enumerate());
+    } catch (err) {
+      // not an error, just no tracks with the prop/value
+    }
+  },
+
+  addClientListListener : function(cid,listener,ownsWeak,flags,filter) {
     
     var list = this.playdarLibrary.getItemByGuid(cid);
     list.addListener(listener,ownsWeak,flags,filter);
   },
 
-  getClientResultsList : function(cid) {
+  getClientList : function(cid) {
 
     return this.playdarLibrary.getItemByGuid(cid);
+  },
+
+  showClientListInServicePane : function(cid,name) {
+
+    var list = this.getClientList(cid);
+    list.name = name;
+    list.setProperty(SBProperties.hidden,"0");
+    
+    var listener =  {
+      onEnumerationBegin : function(list) {},
+      onEnumeratedItem : function(list,item) {
+        item.setProperty(SBProperties.hidden,"0")
+      },
+      onEnumerationEnd : function(list,code) {}
+    };
+    list.enumerateAllItems(listener);
   },
 
   stat : function(cid) {
@@ -285,13 +341,12 @@ sbIPlaydarService.prototype = {
   processResults : function(decodedResp,cid) {
     
     var results = decodedResp.results; 
-    var clientList = this.getClientResultsList(cid);
+    var clientList = this.getClientList(cid);
     for (var r in results) {
       var currResult = results[r];
       var sid = currResult.sid;
       if (!this.listContainsSid(clientList,sid)) {
-        Cu.reportError("adding " + currResult.track + " to " + cid);
-        this.addTrackToList(clientList,currResult);
+        this.addTrackToList(clientList,currResult,cid);
       }
     }
   },
@@ -323,7 +378,7 @@ sbIPlaydarService.prototype = {
     return libUtils.getContentURI(uri);
   },
 
-  addTrackToList : function(mediaList,result) {
+  addTrackToList : function(mediaList,result,cid) {
     
     var propArray =
       Cc['@songbirdnest.com/Songbird/Properties/MutablePropertyArray;1']
@@ -338,7 +393,12 @@ sbIPlaydarService.prototype = {
     if(result.bitrate)
       propArray.appendProperty(SBProperties.bitRate,result.bitrate);
     if(result.duration)
-      propArray.appendProperty(SBProperties.duration,result.duration);
+      propArray.appendProperty(SBProperties.duration,result.duration*1000000);
+
+    var hidden = this.keepHidden[cid] ? "1" : "0";
+    propArray.appendProperty(SBProperties.hidden,hidden);
+  
+    propArray.appendProperty(SBProperties.isList,"0");
     
     var contentURI = this.getUriForSid(result.sid);
     
@@ -356,6 +416,7 @@ sbIPlaydarService.prototype = {
         svc.getResults(decodedResp.qid,cid);
       }, decodedResp.poll_interval || decodedResp.refresh_interval);
     }
+    return finalAnswer;
   },
 
   shouldStopPolling : function(decodedResp) {

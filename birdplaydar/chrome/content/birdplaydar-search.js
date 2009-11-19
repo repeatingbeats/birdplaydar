@@ -15,9 +15,8 @@ if (typeof Birdplaydar == 'undefined') {
   var Birdplaydar = {};
 }
 
-Birdplaydar.Page = {
+Birdplaydar.SearchPage = {
 
-  SID_URL_BASE : "http://localhost:60210/sid/",
 
   _mediaListView: null,
 
@@ -28,30 +27,55 @@ Birdplaydar.Page = {
    */
   onLoad:  function(e) {
 
-    // Make sure we have the javascript modules we're going to use
-    if (!window.SBProperties) 
-      Cu.import("resource://app/jsmodules/sbProperties.jsm");
-    if (!window.LibraryUtils) 
-      Cu.import("resource://app/jsmodules/sbLibraryUtils.jsm");
-    if (!window.kPlaylistCommands) 
-      Cu.import("resource://app/jsmodules/kPlaylistCommands.jsm");
-
+    // set up our columnSpec
     var cspec = SBProperties.trackName + " 250 " +
                 SBProperties.artistName + " 170 " +
                 SBProperties.albumName + " 170 " +
                 SBProperties.duration + " 40 " +
-                SBProperties.bitRate + " 70 " +
-                SBProperties.downloadButton + " 85";
-    this._mediaList = LibraryUtils.mainLibrary.createMediaList("simple");
-    this._mediaList.setProperty(SBProperties.hidden,"1");
+                SBProperties.bitRate + " 70 ";
+   
+    // set up our interaction with playdar 
+    this.playdarService = Cc['@repeatingbeats.com/playdar/playdar-service;1']
+                            .getService(Ci.sbIPlaydarService);
+  
+    var playdarServiceListener = {
+    
+      onStat : function(detected) {
+        if (detected) {
+          // do nothing right now
+        } else {
+          alert("playdar not detected");
+        }
+      }, 
+      onResults : function(response,finalAnswer) {
+        // do nothing, use a mediaList listener instead
+      },
+    };
+
+    var playdarMediaListListener = {
+
+      onItemAdded: function(list,item,i) {
+        // items are hidden by default
+        item.setProperty(SBProperties.hidden,"0");
+      }
+    };
+
+    // register the client and add the medialist listener
+    this.playdarCID = this.playdarService
+                          .registerClient(playdarServiceListener,false);
+    this._mediaList = this.playdarService.getClientList(this.playdarCID);
+    this.playdarService.addClientListListener(this.playdarCID,
+         playdarMediaListListener, false,
+        LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
+     
     this._mediaList.setProperty(SBProperties.columnSpec,cspec);
     this._playlist = document.getElementById("birdplaydar-playlist");
-    
+   
+    // hook up the playlist and the view
     var mgr = Cc["@songbirdnest.com/Songbird/PlaylistCommandsManager;1"]
                 .createInstance(Ci.sbIPlaylistCommandsManager);
     var cmds = mgr.request(kPlaylistCommands.MEDIAITEM_DEFAULT);
     this._mediaListView = this._mediaList.createView(); 
-    // Set up the playlist widget
     this._playlist.bind(this._mediaListView, cmds);
 
     // hook up the search button
@@ -66,107 +90,24 @@ Birdplaydar.Page = {
         controller.resolveQuery();
       },false);
   
-    var listeners = {
-      
-      onStat : function (detected) {
-        if (detected) {
-          alert('Playdar detected');
-        } else {
-          alert('Playdar unavailable');
-        }
-      },
-
-      onResults : function (response,final_answer) {
-        Birdplaydar.Page.processResults(response,final_answer);
-      },
-
-    };
-
-    this.utils = Birdplaydar.Utils;
-    this.utils.register_listeners(listeners);
-    
-    this.utils.stat();
-
-  },
-
-  processResults : function(resp, final_answer) {
-     
-    var results = resp.results;
-    for (var r in results) {
-      var curr_result = results[r];
-      if (this.sids.indexOf(curr_result.sid) == -1) {
-        this.sids.push(curr_result.sid);
-        this.addTrack(curr_result);
-      }
-    }
-     
-  },
-
-  // add track to media list from http API result
-  addTrack : function(result) {
-    
-    var propArray = Cc['@songbirdnest.com/Songbird/Properties/MutablePropertyArray;1']
-                      .createInstance(Ci.sbIMutablePropertyArray);
-    if(result.track)
-      propArray.appendProperty(SBProperties.trackName,result.track);
-    if(result.artist)
-      propArray.appendProperty(SBProperties.artistName,result.artist);
-    if(result.album)
-      propArray.appendProperty(SBProperties.albumName,result.album);
-    if(result.bitrate)
-      propArray.appendProperty(SBProperties.bitRate,result.bitrate);
-    if(result.duration)
-      propArray.appendProperty(SBProperties.duration,result.duration);
-    
-    var ioSvc = Cc['@mozilla.org/network/io-service;1']
-                  .getService(Ci.nsIIOService);
-    var uri = ioSvc.newURI(this.SID_URL_BASE + result.sid, null, null);
-    var libUtils = Cc['@songbirdnest.com/Songbird/library/Manager;1']
-                     .getService(Ci.sbILibraryUtils);
-    var contentURI = libUtils.getContentURI(uri);
-    
-    var mediaItem = LibraryUtils.mainLibrary.createMediaItem(contentURI,propArray);
-    
-    this._mediaList.add(mediaItem);
-
-    
-
   },
 
   resolveQuery : function() {
     
-    var song = document.getElementById("song-search-input").value;
+    var track = document.getElementById("song-search-input").value;
     var artist = document.getElementById("artist-search-input").value;
     var album = document.getElementById("album-search-input").value;
-    
-    this.sids = [];
-    this.removePreviousResults();  
-    this.utils.resolve(artist,album,song);  
+   
+    this._mediaList.clear();
+    this.playdarService.resolve(this.playdarCID,artist,album,track); 
   },
 
-  removePreviousResults : function() {
-    
-    var listener = {
-      onEnumerationBegin : function(list) {
-
-      },
-      onEnumeratedItem : function(list,item) {
-        LibraryUtils.mainLibrary.remove(item);
-      },
-      onEnumerationEnd : function(list,code) {
-
-      }
-    };
-
-    this._mediaList.enumerateAllItems(listener);
-  },  
-
-   /** 
+  /** 
    * Called as the window is about to unload
    */
   onUnload:  function(e) {
     
-    //this._mediaListView.removeListener(this._listViewListener);
+    this.playdarService.unregisterClient(this.playdarCID,true,false);
     if (this._playlist) {
       this._playlist.destroy();
       this._playlist = null;

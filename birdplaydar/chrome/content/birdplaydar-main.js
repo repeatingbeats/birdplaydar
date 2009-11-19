@@ -24,71 +24,10 @@ Birdplaydar.Controller = {
     var controller = this;
     this.strings = document.getElementById("birdplaydar-strings");
     this._menuCmd = document.getElementById("birdplaydar-menu-cmd");
-    this._menuCmd.addEventListener("command",
-      function() {
+    this._menuCmd.addEventListener("command", function() {
         // test the XPCOM component
-        var svc = Cc['@repeatingbeats.com/playdar/playdar-service;1']
-                    .getService(Ci.sbIPlaydarService);
-        var controller = this;
-        var listener = {
-            clientID : null, 
-            onStat : function(detected) {
-              if (detected) {
-                alert("Playdar detected");
-                svc.resolve(controller.cid,'The Hold Steady','','Positive');
-                svc.resolve(controller.cid,'The National','','Fake Empire');
-                svc.resolve(controller.cid,'The HoldSteady','','Positive');
-              } else {
-                alert("Playdar unavailable");
-              }
-            },
-  
-            onResults : function(response,finalAnswer) {
-              //alert("got response: " + response + 
-              //      "\nfinalAnswer: " + finalAnswer);
-            }
-        };
-
-        this.cid = svc.registerClient(listener);
-        var listListener = {
-          onItemAdded : function(list, item, i) {
-            alert("added track: " + item.getProperty(SBProperties.trackName) +
-                  "\nto media list for client: " + controller.cid);
-          }
-        };
-
-        svc.addResultsListListener(this.cid,listListener,false,
-            LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
-
-        var listener2 = {
-            clientID : null, 
-            onStat : function(detected) {
-              if (detected) {
-                alert("Playdar detected");
-                svc.resolve(controller.cid2,'The Hold Steady','','Constructive Summer');
-              } else {
-                alert("Playdar unavailable");
-              }
-            },
-  
-            onResults : function(response,finalAnswer) {
-              //alert("got response: " + response + 
-              //      "\nfinalAnswer: " + finalAnswer);
-            }
-        };
-
-        this.cid2 = svc.registerClient(listener2);
-        var listListener2 = {
-          onItemAdded : function(list, item, i) {
-            alert("added track: " + item.getProperty(SBProperties.trackName) +
-                  "\nto media list for client: " + controller.cid2);
-          }
-        };
-
-        svc.addResultsListListener(this.cid,listListener2,false,
-            LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
-
-      },false);
+        Birdplaydar.Test.run();
+    },false);
   
     this.addServicePaneBookmark();  
   
@@ -108,18 +47,21 @@ Birdplaydar.Controller = {
     var svcPaneSvc =  Cc['@songbirdnest.com/servicepane/service;1']
 			            .getService(Ci.sbIServicePaneService);
 	svcPaneSvc.init();
-	
-    var birdplaydarNode = svcPaneSvc.getNode("urn:birdplaydar");
+    
+    var playdarService = Cc['@repeatingbeats.com/playdar/playdar-service;1']
+                           .getService(Ci.sbIPlaydarService);
+
+    var playdarServiceNode = playdarService.playdarServiceNode;	
+    var birdplaydarNode = svcPaneSvc.getNode("urn:birdplaydar-search");
+  
     if (birdplaydarNode == null) {
-      birdplaydarNode = svcPaneSvc.addNode("urn:birdplaydar", svcPaneSvc.root, false);
+      birdplaydarNode = svcPaneSvc.addNode("urn:birdplaydar-search",
+                                           playdarServiceNode, false);
       birdplaydarNode.url = "chrome://birdplaydar/content/birdplaydar-search.xul";
       birdplaydarNode.name = this.strings.getString("servicePaneName");
       birdplaydarNode.tooltip = this.strings.getString("servicePaneTooltip");
-      birdplaydarNode.properties = "birdplaydar";
+      birdplaydarNode.properties = "birdplaydar-search";
       birdplaydarNode.image = "http://www.playdar.org/favicon.ico";
-      birdplaydarNode.setAttributeNS(
-				"http://songbirdnest.com/rdf/servicepane#", "Weight", -3);
-      svcPaneSvc.sortNode(birdplaydarNode);
       svcPaneSvc.save();
     }
 
