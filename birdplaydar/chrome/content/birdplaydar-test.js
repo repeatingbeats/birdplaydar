@@ -84,7 +84,7 @@ Birdplaydar.Test = {
     // resolve on all three clients
     test.svc.showClientListInServicePane(test.cidC,"testC");
     test.svc.showClientListInServicePane(test.cidD,"testD");
-    test.svc.resolve(test.cidC,'The National','','Fake Empire');
+    test.svc.resolve(test.cidC,'Ezra Furman & The Harpoons','','We Should Fight');
     test.svc.resolve(test.cidD,'Animal Collective','','Banshee Beat');
     test.svc.resolve(test.cidE,'The Hold Steady','','Positive');
     window.setTimeout(function() {test.run7(test)},15000);

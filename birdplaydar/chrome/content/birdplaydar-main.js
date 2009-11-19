@@ -29,7 +29,8 @@ Birdplaydar.Controller = {
         Birdplaydar.Test.run();
     },false);
   
-    this.addServicePaneBookmark();  
+    this.addServicePaneBookmark();
+    this.configureUninstallObserver();  
   
   },
  
@@ -69,6 +70,67 @@ Birdplaydar.Controller = {
     }
 
     birdplaydarNode.hidden = false;
+  },
+
+  configureUninstallObserver : function() {
+    
+    var myUninstallObserver = {  
+      _uninstall : false,  
+      _tabs : null,  
+ 
+      observe : function(subject, topic, data) {  
+        if (topic == "em-action-requested") {  
+          // Extension has been flagged to be uninstalled  
+          subject.QueryInterface(Ci.nsIUpdateItem);  
+          if (subject.id == "birdplaydar@repeatingbeats.com") {  
+            if (data == "item-uninstalled") {  
+              this._uninstall = true;  
+            } else if (data == "item-cancel-action") {  
+              this._uninstall = false;  
+            }  
+          }  
+        } else if (topic == "quit-application-granted") {  
+          // We're shutting down, so check to see if we were flagged  
+          // for uninstall - if we were, then cleanup here  
+          if (this._uninstall) {  
+            // Do your cleanup stuff here  
+            // such as deleting preferences, servicepane nodes,  
+            // lists, libraries, etc.
+    
+            // remove service pane stuff
+            var sps = Cc['@songbirdnest.com/servicepane/service;1']
+                        .getService(Ci.sbIServicePaneService);
+            var birdplaydarFolder = sps.getNode("urn:playdar");
+            sps.removeNode(birdplaydarFolder);
+
+            // for the time being, leave the Playdar library because
+            // other add-ons might be using it. Need to develop a system
+            // to track what extensions are using the sbIPlaydarService
+            // so the last one can remove the library when it is uninstalled.
+   
+            dump("Uninstalled!\n");  
+          }  
+          this.unregister();  
+        }  
+      },  
+   
+      register : function() {  
+        var observerService = Cc["@mozilla.org/observer-service;1"]  
+                                .getService(Ci.nsIObserverService);  
+        observerService.addObserver(this, "em-action-requested", false);  
+        observerService.addObserver(this, "quit-application-granted", false);  
+      },
+  
+      unregister : function() {  
+        var observerService = Cc["@mozilla.org/observer-service;1"]  
+                                .getService(Ci.nsIObserverService);  
+        observerService.removeObserver(this, "em-action-requested");  
+        observerService.removeObserver(this, "quit-application-granted");
+      }  
+    };
+
+    myUninstallObserver.register();
+    
   },
  
 };

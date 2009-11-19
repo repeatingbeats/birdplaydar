@@ -555,8 +555,6 @@ sbIPlaydarService.prototype = {
     return uuid.join('');
   },
 
-  null_callback : function() {}
-
 };
 
 // doing this the long way instead of using XPCOMUtils so we can 
