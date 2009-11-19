@@ -13,6 +13,7 @@ goals:
 TODO:
 
 (1) Fix minor bugs in search add-on.
-(2) Document sbIPlaydarService interface.
-(3) Write brief tutorial for using the interface.
-(4) Add license and credits.
+(2) Add an Uninstall Observer to remove the library and service pane nodes.
+(3) Document sbIPlaydarService interface.
+(4) Write brief tutorial for using the interface.
+(5) Add license and credits.
