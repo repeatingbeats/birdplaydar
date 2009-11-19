@@ -81,11 +81,15 @@ function sbIPlaydarService() {
     playdarFolderNode.hidden = false;
     playdarFolderNode.editable = false;
     playdarFolderNode.properties = "folder playdar";
+    playdarFolderNode.setAttributeNS(
+        "http://songbirdnest.com/rdf/servicepane#", "Weight", 5);
     
     // create the library node
     var libSps = Cc['@songbirdnest.com/servicepane/library;1']
                        .getService(Ci.sbILibraryServicePaneService);
     var playdarLibraryNode = libSps.createNodeForLibrary(this.playdarLibrary);
+    playdarLibraryNode.setAttributeNS(
+          "http://songbirdnest.com/rdf/servicepane#", "Weight", 6);
     playdarFolderNode.appendChild(playdarLibraryNode);
     playdarLibraryNode.hidden = false;
     sps.save();

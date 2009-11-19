@@ -57,11 +57,14 @@ Birdplaydar.Controller = {
     if (birdplaydarNode == null) {
       birdplaydarNode = svcPaneSvc.addNode("urn:birdplaydar-search",
                                            playdarServiceNode, false);
-      birdplaydarNode.url = "chrome://birdplaydar/content/birdplaydar-search.xul";
+      birdplaydarNode.url =
+          "chrome://birdplaydar/content/birdplaydar-search.xul";
       birdplaydarNode.name = this.strings.getString("servicePaneName");
       birdplaydarNode.tooltip = this.strings.getString("servicePaneTooltip");
       birdplaydarNode.properties = "birdplaydar-search";
       birdplaydarNode.image = "http://www.playdar.org/favicon.ico";
+      playdarServiceNode.insertBefore(birdplaydarNode,
+                                      playdarServiceNode.firstChild);
       svcPaneSvc.save();
     }
 
