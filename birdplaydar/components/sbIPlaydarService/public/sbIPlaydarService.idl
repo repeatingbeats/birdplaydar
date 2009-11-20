@@ -82,7 +82,6 @@ interface sbIPlaydarService : nsISupports
                         in boolean aRemoveAllTracks,
                         [optional] in boolean aRemoveHiddenTracks);
 
-
   /**
    * \brief gets the sbIMediaList for a given client. playdar tracks are
    *        resolved to this list.
@@ -106,13 +105,13 @@ interface sbIPlaydarService : nsISupports
    * \param aArtist Track artist
    * \param aAlbum Track album
    * \param aTrack Track name
-   * \param aQID Query ID
+   * \param aQid Query ID
    */
   void resolve(in AString aCid,
                in AString aArtist,
                in AString aAlbum,
                in AString aTrack,
-               [optional] in AString aQID);
+               [optional] in AString aQid);
 
   /**
    * \brief Set the client's playdar medialist to be visible in the service

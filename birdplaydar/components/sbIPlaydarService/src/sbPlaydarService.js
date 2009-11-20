@@ -246,7 +246,7 @@ sbIPlaydarService.prototype = {
   
     var list = this.playdarLibrary.createMediaList('simple');
     var cid = list.getProperty(SBProperties.GUID);
-    listener.cid = cid;
+    aListener.cid = cid;
     this.listeners[cid] = aListener;
     this.stat(cid);
     this.keepHidden[cid] = aHideTracks;
@@ -597,7 +597,7 @@ sbIPlaydarService.prototype = {
       }
     }
     return uuid.join('');
-  },
+  }
 
 };
 

@@ -71,10 +71,10 @@ Birdplaydar.SearchPage = {
       }, 
       onResults : function(response,finalAnswer) {
         if (finalAnswer) {
+          var feedback = document.getElementById("resolve-feedback");
+          feedback.value = controller.getFeedbackString();
+          feedback.hidden = false;
           document.getElementById("resolve-progress").hidden = true;
-          document.getElementById("resolve-feedback").value = 
-              controller.getFeedbackString();
-          document.getElementById("resolve-feedback").hidden = false;
         }
       },
     };
@@ -91,8 +91,7 @@ Birdplaydar.SearchPage = {
     this.playdarCID = this.playdarService
                           .registerClient(playdarServiceListener,false);
     this._mediaList = this.playdarService.getClientList(this.playdarCID);
-    this.playdarService.addClientListListener(this.playdarCID,
-         playdarMediaListListener, false,
+    this._mediaList.addListener(playdarMediaListListener, false,
         LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED);
      
     // set up our columnSpec
@@ -112,8 +111,6 @@ Birdplaydar.SearchPage = {
     var cmds = mgr.request(kPlaylistCommands.MEDIAITEM_DEFAULT);
     this._mediaListView = this._mediaList.createView(); 
     this._playlist.bind(this._mediaListView, cmds);
-
-
 
     // hook up the search button
     var wMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
@@ -159,7 +156,7 @@ Birdplaydar.SearchPage = {
       var album = document.getElementById("album-search-input").value;
 
       if (track == '' && artist == '' && album == '') {
-        alert("empty");
+        alert(this.strings.getString("playdarEmptySearch"));
         return;
       }
    
@@ -184,10 +181,7 @@ Birdplaydar.SearchPage = {
     }
     this.detected = detected;
   },
-
-  /** 
-   * Called as the window is about to unload
-   */
+ 
   onUnload:  function(e) {
     
     this.playdarService.unregisterClient(this.playdarCID,true,false);
@@ -196,6 +190,7 @@ Birdplaydar.SearchPage = {
       this._playlist = null;
     }
   },
+
   /** 
    * Show/highlight the MediaItem at the given MediaListView index.
    * Called by the Find Current Track button.

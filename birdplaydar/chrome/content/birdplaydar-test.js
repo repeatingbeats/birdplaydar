@@ -65,7 +65,8 @@ Birdplaydar.Test = {
 
     // attempt resolution
     test.listListenerA = test.makeSimpleListListener();
-    test.svcA.addClientListListener(test.cidA,test.listListenerA,false,
+    test.listA = test.svcA.getClientList(test.cidA);
+    test.listA.addListener(test.listListenerA,false,
       LibraryUtils.mainLibrary.LISTENER_FLAGS_ITEMADDED |
       LibraryUtils.mainLibrary.LISTENER_FLAGS_AFTERITEMREMOVED)
     test.svcA.resolve(test.cidA,'The Hold Steady','','Sweet Payne');
@@ -187,16 +188,16 @@ Birdplaydar.Test = {
   makeSimplePlaydarListener : function() {
 
     return {
-      clientID : null,
+      cid : null,
       onStat : function(detected) {
         if (detected) {
-          dump("\nplaydar detected for client: " + this.clientID);
+          dump("\nplaydar detected for client: " + this.cid);
         } else {
-          dump("\nplaydar not detected for client: " + this.clientID);
+          dump("\nplaydar not detected for client: " + this.cid);
         }
       },
       onResults : function(response,finalAnswer) {
-        dump("\nplaydar results for client: " + this.clientID +
+        dump("\nplaydar results for client: " + this.cid +
              "\n\tresponse: " + response +
              "\n\tfinalAnswer: " + finalAnswer);
       }
