@@ -58,7 +58,7 @@ Birdplaydar.Controller = {
     this._menuCmd.addEventListener("command", function() {
       alert(controller.strings.getString("versionMessage"));
       // uncomment here to run the test routine
-      Birdplaydar.Test.run();
+      //Birdplaydar.Test.run();
     },false);
   
     this.addServicePaneBookmark();

@@ -15,15 +15,14 @@
     <em:type>2</em:type>
     <em:name>birdplaydar</em:name>
     <em:version>0.0.1.0</em:version>
-    <em:creator>Steve Lloyd</em:creator>
+    <em:creator>repeatingbeats</em:creator>
     <em:description>playdar music search for songbird</em:description>
     <em:homepageURL>http://www.repeatingbeats.com</em:homepageURL>
     <em:optionsURL>chrome://birdplaydar/content/birdplaydar-options.xul</em:optionsURL>
-    <em:targetPlatform>@EXTENSION_ARCH@</em:targetPlatform>   
     <em:targetApplication>
       <Description>
         <em:id>songbird@songbirdnest.com</em:id>
-        <em:minVersion>1.0.0pre</em:minVersion>
+        <em:minVersion>1.2.0</em:minVersion>
         <em:maxVersion>1.5.0a</em:maxVersion>
       </Description>
     </em:targetApplication>
