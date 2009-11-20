@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# Copyright (c) 2009 Steven M. Lloyd
+# steve@repeatingbeats.com
 
 echo birdplaydar packaging process initiated...
 

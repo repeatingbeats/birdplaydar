@@ -1,3 +1,34 @@
+/*
+ * Controller script for Birdplaydar
+ *
+ * Copyright (c) 2009 Steven M. Lloyd
+ * steve@repeatingbeats.com
+ *
+ *
+ * This file is part of the Birdplaydar Songbird add-on.
+ *
+ * This file may be licensed under the terms of of the
+ * GNU General Public License Version 2 (the ``GPL'').
+ *
+ * Software distributed under the License is distributed
+ * on an ``AS IS'' basis, WITHOUT WARRANTY OF ANY KIND, either
+ * express or implied. See the GPL for the specific language
+ * governing rights and limitations.
+ *
+ * You should have received a copy of the GPL along with this
+ * program. If not, go to http://www.gnu.org/licenses/gpl.html
+ * or write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * -----------------------------------------------------------------------------
+ *
+ * Portions of this source were derived fom the Songbird Concerts add-on
+ * Copyright (c) 2008, Pioneers of the Inevitable, Inc.
+ * 
+ * See LICENSE in the top level folder for more information.
+ */
+
+
 
 if (typeof(Cc) == 'undefined')
   var Cc = Components.classes;
@@ -25,8 +56,7 @@ Birdplaydar.Controller = {
     this.strings = document.getElementById("birdplaydar-strings");
     this._menuCmd = document.getElementById("birdplaydar-menu-cmd");
     this._menuCmd.addEventListener("command", function() {
-        // test the XPCOM component
-        Birdplaydar.Test.run();
+      alert(controller.strings.getString("versionString"));
     },false);
   
     this.addServicePaneBookmark();
@@ -72,6 +102,11 @@ Birdplaydar.Controller = {
     birdplaydarNode.hidden = false;
   },
 
+  /*
+   * Borrowed from here:
+   *
+   * http://wiki.songbirdnest.com/index.php?title=Developer/Recipe_Book/Extensions_and_Core/Uninstall&highlight=uninstall
+   */
   configureUninstallObserver : function() {
     
     var myUninstallObserver = {  

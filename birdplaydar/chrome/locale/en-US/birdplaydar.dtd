@@ -3,7 +3,7 @@
 <!ENTITY birdplaydar.prefs.testpref.label "birdplaydar test preference">
 <!ENTITY birdplaydar.prefs.testpref.accesskey "t">
 
-<!ENTITY birdplaydar.menucommand.label "about birdplaydar">
+<!ENTITY birdplaydar.menucommand.label "birdplaydar version">
 
 <!ENTITY birdplaydar.mediapage.searchHeading "birdplaydar search">
 <!ENTITY birdplaydar.mediapage.songSearch "song: ">

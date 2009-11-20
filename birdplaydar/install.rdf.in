@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+    Copyright (c) 2009 Steven M. Lloyd
+    steve@repeatingbeats.com
+-->
+
 #filter substitution
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:em="http://www.mozilla.org/2004/em-rdf#"
@@ -9,7 +14,7 @@
     <em:id>@EXTENSION_UUID@</em:id>
     <em:type>2</em:type>
     <em:name>birdplaydar</em:name>
-    <em:version>0.0.0.1</em:version>
+    <em:version>0.0.1.0</em:version>
     <em:creator>Steve Lloyd</em:creator>
     <em:description>playdar music search for songbird</em:description>
     <em:homepageURL>http://www.repeatingbeats.com</em:homepageURL>
