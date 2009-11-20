@@ -203,7 +203,8 @@ sbIPlaydarService.prototype = {
 
   // ---- end boilerplate
 
-  VERSION : "0.0.0.1",
+  versionString : "0.0.1.0",
+
   SERVER_ROOT : "localhost",
   SERVER_PORT : "60210",
   STAT_TIMEOUT : 2000,
@@ -241,36 +242,37 @@ sbIPlaydarService.prototype = {
     req.send(null);
   },
 
-  registerClient : function(listener,keepTracksHidden) {
+  registerClient : function(aListener,aHideTracks) {
   
     var list = this.playdarLibrary.createMediaList('simple');
-    var clientID = list.getProperty(SBProperties.GUID);
-    listener.clientID = clientID;
-    this.listeners[clientID] = listener;
-    this.stat(clientID);
-    this.keepHidden[clientID] = keepTracksHidden;
-    return clientID; 
+    var cid = list.getProperty(SBProperties.GUID);
+    listener.cid = cid;
+    this.listeners[cid] = aListener;
+    this.stat(cid);
+    this.keepHidden[cid] = aHideTracks;
+    return cid; 
   },
 
-  unregisterClient : function(cid,removeClientList,removeAllTracks,removeHiddenTracks) {
+  unregisterClient : function(aCid,aRemoveClientList,
+                              aRemoveAllTracks,aRemoveHiddenTracks) {
     
-    var list = this.getClientList(cid);
-    if (removeAllTracks) {
+    var list = this.getClientList(aCid);
+    if (aRemoveAllTracks) {
       // remove all tracks on this client's list from the playdar library
       this.removeItemsByProperty(list,SBProperties.isList,"0"); 
     } else {
-       if (removeHiddenTracks) {
+       if (aRemoveHiddenTracks) {
         // remove all hidden tracks on client's list from the playdar library
         this.removeItemsByProperty(list,SBProperties.hidden,"1");
       }
     }
  
-    if (removeClientList) {
+    if (aRemoveClientList) {
       // remove this client's results list from the playdar library
       this.playdarLibrary.remove(list);
     }
     // remove the playdarServiceListener
-    delete this.listeners[cid];
+    delete this.listeners[aCid];
   },
 
   removeItemsByProperty : function(list,prop,value) {
@@ -282,22 +284,16 @@ sbIPlaydarService.prototype = {
       // not an error, just no tracks with the prop/value
     }
   },
+ 
+  getClientList : function(aCid) {
 
-  addClientListListener : function(cid,listener,ownsWeak,flags,filter) {
-    
-    var list = this.playdarLibrary.getItemByGuid(cid);
-    list.addListener(listener,ownsWeak,flags,filter);
+    return this.playdarLibrary.getItemByGuid(aCid);
   },
 
-  getClientList : function(cid) {
+  showClientListInServicePane : function(aCid,aName) {
 
-    return this.playdarLibrary.getItemByGuid(cid);
-  },
-
-  showClientListInServicePane : function(cid,name) {
-
-    var list = this.getClientList(cid);
-    list.name = name;
+    var list = this.getClientList(aCid);
+    list.name = aName;
     list.setProperty(SBProperties.hidden,"0");
     
     var listener =  {
@@ -310,14 +306,14 @@ sbIPlaydarService.prototype = {
     list.enumerateAllItems(listener);
   },
 
-  stat : function(cid) {
+  stat : function(aCid) {
       
       var svc = this;
       this.setTimeout(function () {
-        svc.checkStatTimeout(cid);
+        svc.checkStatTimeout(aCid);
       }, this.STAT_TIMEOUT);
       this.callAPI('stat', null, function(resp) {
-          svc.handleStat(resp,cid);
+          svc.handleStat(resp,aCid);
       });
   },
 
@@ -334,18 +330,17 @@ sbIPlaydarService.prototype = {
     this.getListenerByCid(cid).onStat(resp);
   },
 
-  resolve : function(cid,artist,album,track,qid,url) {
+  resolve : function(aCid,aArtist,aAlbum,aTrack,aQid) {
 
     var params = {
-      artist : artist || '',
-      album  : album || '',
-      track  : track || '',
-      url    : url || '',
-      qid    : qid || this.generateUUID()
+      artist : aArtist || '',
+      album  : aAlbum || '',
+      track  : aTrack || '',
+      qid    : aQid || this.generateUUID()
     };
 
     var query = {
-      cid : cid,
+      cid : aCid,
       params : params,
     }
 

@@ -24,10 +24,30 @@
 
 #include "nsISupports.idl"
 
+/**
+ * \interface sbIPlaydarServiceListener
+ *
+ * \brief Listens to sbIPlaydar Service for a client.
+ */
+
 [scriptable, uuid(1c761454-b795-418e-8497-4ece9d20107f)]
 interface sbIPlaydarServiceListener : nsISupports
 {
-  attribute AString clientID;
-  void onStat(in boolean detected);
-  void onResults(in AString response, in boolean finalAnswer); 
+  /** \brief Client ID */
+  readonly attribute AString cid;
+
+  /**
+   * \brief Called when Playdar stat() completes
+   *
+   * \param aDetected True if Playdar was detected
+   */
+  void onStat(in boolean aDetected);
+
+  /**
+   * \brief Called when Playdar returns resolution results
+   *
+   * \param aResponse Stringified JSON Playdar results object
+   * \param aFinalAnswer True if final results for query
+   */
+  void onResults(in AString aResponse, in boolean aFinalAnswer); 
 };

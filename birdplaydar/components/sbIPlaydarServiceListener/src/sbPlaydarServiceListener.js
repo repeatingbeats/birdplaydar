@@ -55,13 +55,13 @@ sbIPlaydarServiceListener.prototype = {
 
   QueryInterface : XPCOMUtils.generateQI([Ci.sbIPlaydarServiceListener]),
 
-  clientID : null,
+  cid : null,
   
-  onStat : function(detected) {
+  onStat : function(aDetected) {
 
   },
 
-  onResults : function(response,finalAnswer) {
+  onResults : function(aResponse,aFinalAnswer) {
 
   }
 

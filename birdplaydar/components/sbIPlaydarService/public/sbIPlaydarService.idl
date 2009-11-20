@@ -70,14 +70,14 @@ interface sbIPlaydarService : nsISupports
   /**
    * \brief cleanup when client no longer needs service
    *
-   * \param aCID Client ID
+   * \param aCid Client ID
    * \param aRemoveClientList If true, client playlist is removed from library
    * \param aRemoveAllTracks If true, all tracks resolved for this client are
    *                         removed from the library
    * \param aRemoveHiddenTracks If true, only hidden tracks resolved for this
    *                            client are removed from the library
    */
-  void unregisterClient(in AString aCID,
+  void unregisterClient(in AString aCid,
                         in boolean aRemoveClientList,
                         in boolean aRemoveAllTracks,
                         [optional] in boolean aRemoveHiddenTracks);
@@ -87,11 +87,11 @@ interface sbIPlaydarService : nsISupports
    * \brief gets the sbIMediaList for a given client. playdar tracks are
    *        resolved to this list.
    *
-   * \param aCID Client ID
+   * \param aCid Client ID
    * 
    * \return an sbIMediaList for this client
    */
-  sbIMediaList getClientList(in AString aCID);
+  sbIMediaList getClientList(in AString aCid);
 
   /**
    * \brief query to check availability of playdar. the 'onStat' function in
@@ -102,25 +102,25 @@ interface sbIPlaydarService : nsISupports
   /**
    * \brief query playdar to resolve a track
    *
-   * \param aCID Client ID
+   * \param aCid Client ID
    * \param aArtist Track artist
    * \param aAlbum Track album
    * \param aTrack Track name
    * \param aQID Query ID
    */
-  void resolve(in AString aCID,
+  void resolve(in AString aCid,
                in AString aArtist,
                in AString aAlbum,
                in AString aTrack,
-               [optional] in AString qid);
+               [optional] in AString aQID);
 
   /**
    * \brief Set the client's playdar medialist to be visible in the service
    *        pane. This automatically sets resolved tracks to be visible.
    *
-   * \param aCID Client ID
+   * \param aCid Client ID
    * \param aName Name for the playlist
    */
-  void showClientListInServicePane (in AString cid,
-                                    in AString name);  
+  void showClientListInServicePane (in AString aCid,
+                                    in AString aName);  
 };
