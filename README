@@ -12,13 +12,14 @@ goals:
 -----------
 
 Birdplaydar exposes the Playdar music content resolver service to Songbird
-add-on via the sbIPlaydarService XPCOM service. The birdplaydar search page lets
+add-ons via the sbIPlaydarService XPCOM service. The birdplaydar search page lets
 you search for tracks using all of your Playdar resolvers. It doesn't matter
 where the track actually is; if Playdar can find it, you can listen.
 
 Download the add-on here:  http://addons.songbirdnest.com/addon/1752
 
-Read about how it works here:
+Read about it here: http://repeatingbeats.com/randlog/2009/11/20/resolving-the-mystery-zone/
 
 Songbird devs who want to use Playdar in their extensions should check out the
-sbIPlaydarService documentation and examples here:
+sbIPlaydarService documentation and examples here: (documentation should be ready soon):w
+
