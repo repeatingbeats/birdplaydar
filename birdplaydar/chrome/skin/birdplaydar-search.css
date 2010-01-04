@@ -18,9 +18,13 @@
   font-size : 1.3em;
 }
 
+#playdar-groupbox {
+  background-color : white;
+}
+
 .resolve-text {
   font-size : 1.3em;
-  color : #666;
+  color : #AAA;
 }
 
 .search {

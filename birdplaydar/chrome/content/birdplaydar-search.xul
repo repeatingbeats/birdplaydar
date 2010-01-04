@@ -121,7 +121,7 @@
           </rows>
         </grid>
       </vbox>
-      <groupbox align="center">
+      <groupbox align="center" id="playdar-groupbox">
         <caption label="&birdplaydar.mediapage.playdarPromo;"/>
         <image src="chrome://birdplaydar/skin/playdar_logo.gif"
                style="padding-bottom:8px;margin-bottom:7px;border-bottom:1px solid #AAA;"/>
