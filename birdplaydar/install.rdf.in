@@ -14,7 +14,7 @@
     <em:id>@EXTENSION_UUID@</em:id>
     <em:type>2</em:type>
     <em:name>birdplaydar</em:name>
-    <em:version>0.0.1.0</em:version>
+    <em:version>0.0.2</em:version>
     <em:creator>repeatingbeats</em:creator>
     <em:description>playdar music search for songbird</em:description>
     <em:homepageURL>http://www.repeatingbeats.com</em:homepageURL>
